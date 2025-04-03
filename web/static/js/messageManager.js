@@ -21,11 +21,38 @@ const MessageManager = {
             messages.forEach(message => {
                 const messageElement = document.createElement('div');
                 messageElement.className = 'message';
+                messageElement.dataset.messageId = message.id;
+                messageElement.dataset.channelId = message.channel_id;
                 
-                // 添加訊息內容
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                
+                const author = document.createElement('span');
+                author.className = 'message-author';
+                author.textContent = message.author;
+                
+                const timestamp = document.createElement('span');
+                timestamp.className = 'message-timestamp';
+                timestamp.textContent = new Date(message.timestamp).toLocaleString();
+                
+                const channel = document.createElement('span');
+                channel.className = 'message-channel';
+                channel.textContent = `#${message.channel_name}`;
+                
+                const messageId = document.createElement('span');
+                messageId.className = 'message-id';
+                messageId.textContent = `ID: ${message.id}`;
+
+                header.appendChild(author);
+                header.appendChild(timestamp);
+                header.appendChild(channel);
+                header.appendChild(messageId);
+                
                 const content = document.createElement('div');
                 content.className = 'message-content';
                 content.textContent = message.content || '';
+                
+                messageElement.appendChild(header);
                 messageElement.appendChild(content);
 
                 // 如果有附件，添加附件
@@ -35,10 +62,13 @@ const MessageManager = {
                     
                     message.attachments.forEach(attachment => {
                         if (attachment.url) {
+                            const imgContainer = document.createElement('div');
+                            imgContainer.className = 'image-container';
+                            
                             const img = document.createElement('img');
                             img.src = attachment.url;
                             img.alt = '附件圖片';
-                            img.className = 'message-attachment';
+                            img.className = 'message-image';
                             img.onclick = () => {
                                 window.toggleZoom(img);
                                 // 點擊遮罩層時關閉圖片
@@ -47,18 +77,13 @@ const MessageManager = {
                                     window.toggleZoom(img);
                                 };
                             };
-                            attachmentsContainer.appendChild(img);
+                            imgContainer.appendChild(img);
+                            attachmentsContainer.appendChild(imgContainer);
                         }
                     });
                     
                     messageElement.appendChild(attachmentsContainer);
                 }
-
-                // 添加時間戳
-                const timestamp = document.createElement('div');
-                timestamp.className = 'message-timestamp';
-                timestamp.textContent = message.timestamp || '';
-                messageElement.appendChild(timestamp);
 
                 messageList.appendChild(messageElement);
             });
@@ -112,5 +137,72 @@ const MessageManager = {
         } catch (error) {
             console.error('更新訊息時發生錯誤:', error);
         }
+    },
+
+    createMessageElement(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.dataset.messageId = message.id;
+        messageDiv.dataset.channelId = message.channel_id;
+
+        const header = document.createElement('div');
+        header.className = 'message-header';
+        
+        const author = document.createElement('span');
+        author.className = 'message-author';
+        author.textContent = message.author;
+        
+        const timestamp = document.createElement('span');
+        timestamp.className = 'message-timestamp';
+        timestamp.textContent = new Date(message.timestamp).toLocaleString();
+        
+        const channel = document.createElement('span');
+        channel.className = 'message-channel';
+        channel.textContent = `#${message.channel_name}`;
+        
+        const messageId = document.createElement('span');
+        messageId.className = 'message-id';
+        messageId.textContent = `ID: ${message.id}`;
+
+        header.appendChild(author);
+        header.appendChild(timestamp);
+        header.appendChild(channel);
+        header.appendChild(messageId);
+        
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = message.content;
+        
+        messageDiv.appendChild(header);
+        messageDiv.appendChild(content);
+        
+        if (message.attachments && message.attachments.length > 0) {
+            const attachmentsDiv = document.createElement('div');
+            attachmentsDiv.className = 'message-attachments';
+            
+            message.attachments.forEach(attachment => {
+                if (attachment.content_type && attachment.content_type.startsWith('image/')) {
+                    const imgContainer = document.createElement('div');
+                    imgContainer.className = 'image-container';
+                    
+                    const img = document.createElement('img');
+                    img.src = attachment.url;
+                    img.alt = '附件圖片';
+                    img.className = 'message-image';
+                    
+                    // 添加點擊事件處理
+                    img.onclick = () => {
+                        window.toggleZoom(img);
+                    };
+                    
+                    imgContainer.appendChild(img);
+                    attachmentsDiv.appendChild(imgContainer);
+                }
+            });
+            
+            messageDiv.appendChild(attachmentsDiv);
+        }
+        
+        return messageDiv;
     }
 }; 

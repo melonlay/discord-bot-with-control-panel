@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Bot 控制面板</title>
+    <title>Discord Bot Control Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -13,17 +13,22 @@
             <div id="connectionStatus" class="disconnected">未連接</div>
             <div class="controls">
                 <select id="guild-selector">
-                    <option value="">選擇伺服器</option>
+                    <option value="">選擇伺服器...</option>
                 </select>
                 <select id="channel-selector">
-                    <option value="">選擇頻道</option>
+                    <option value="">選擇頻道...</option>
                 </select>
-                <button id="refresh-button">重新整理</button>
+                <button id="refresh-btn">重新整理</button>
             </div>
         </header>
         
-        <div id="messages" class="message-list"></div>
+        <div class="message-list">
+            <div id="messages"></div>
+        </div>
     </div>
+
+    <!-- 圖片放大遮罩層 -->
+    <div class="overlay"></div>
 
     <!-- 載入JavaScript模組 -->
     <script src="{{ url_for('static', filename='js/messageFormatter.js') }}"></script>
@@ -39,6 +44,5 @@
             }
         });
     </script>
-    <div class="overlay"></div>
 </body>
 </html> 
