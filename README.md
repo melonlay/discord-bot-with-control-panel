@@ -1,72 +1,74 @@
 # Discord Bot with Control Panel
 
-一個具有網頁控制面板的 Discord 機器人，可以即時查看和管理伺服器訊息。
+English | [繁體中文](README_zh.md)
 
-## 功能特點
+A Discord bot with a web control panel for real-time message monitoring and management.
 
-- 即時訊息監控
-  - 自動每 5 秒更新一次訊息
-  - 支援文字和圖片訊息
-  - 圖片可以點擊放大查看
-- 伺服器管理
-  - 顯示機器人加入的所有伺服器
-  - 自動選擇第一個伺服器
-- 頻道管理
-  - 顯示所選伺服器的所有頻道
-  - 自動選擇第一個頻道
-- 使用者介面
-  - 簡潔的網頁控制面板
-  - 響應式設計
-  - 圖片縮放功能
-  - 自動滾動到最新訊息
+## Features
 
-## 技術棧
+- Real-time Message Monitoring
+  - Auto-updates every 5 seconds
+  - Supports text and image messages
+  - Click to zoom images
+- Server Management
+  - Shows all servers the bot is in
+  - Automatically selects the first server
+- Channel Management
+  - Shows all channels in the selected server
+  - Automatically selects the first channel
+- User Interface
+  - Clean web control panel
+  - Responsive design
+  - Image zoom functionality
+  - Auto-scroll to latest messages
 
-- 後端
+## Tech Stack
+
+- Backend
   - Python
   - Flask
   - discord.py
-- 前端
+- Frontend
   - HTML5
   - CSS3
   - JavaScript (ES6+)
-- 其他
-  - WebSocket (用於即時更新)
+- Others
+  - WebSocket (for real-time updates)
   - RESTful API
 
-## 安裝說明
+## Installation
 
-1. 克隆專案
+1. Clone the project
 ```bash
 git clone https://github.com/yourusername/discord-bot-with-control-panel.git
 cd discord-bot-with-control-panel
 ```
 
-2. 安裝依賴
+2. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 設定環境變數
+3. Set up environment variables
 ```bash
-# 複製範例設定檔
+# Copy example config
 cp .env.example .env
-# 編輯 .env 文件，填入你的 Discord Bot Token
+# Edit .env file and add your Discord Bot Token
 ```
 
-4. 啟動應用程式
+4. Start the application
 ```bash
 python main.py
 ```
 
-## 使用說明
+## Usage
 
-1. 啟動應用程式後，訪問 `http://localhost:5000`
-2. 選擇要監控的伺服器和頻道
-3. 訊息會自動更新，也可以手動點擊重新整理按鈕
-4. 點擊圖片可以放大查看
+1. After starting the application, visit `http://localhost:5000`
+2. Select the server and channel to monitor
+3. Messages will auto-update, or click refresh button manually
+4. Click on images to zoom
 
-## 專案結構
+## Project Structure
 
 ```
 discord-bot-with-control-panel/
@@ -81,6 +83,8 @@ discord-bot-with-control-panel/
 │       ├── __init__.py
 │       └── logger.py
 ├── web/
+│   ├── __init__.py
+│   ├── app.py
 │   ├── static/
 │   │   ├── css/
 │   │   │   └── style.css
@@ -90,39 +94,63 @@ discord-bot-with-control-panel/
 │   │       └── uiManager.js
 │   └── templates/
 │       └── index.html
-├── .env.example
+├── utils/
+├── .env.template
+├── .gitignore
 ├── main.py
 ├── requirements.txt
-└── README.md
+├── LICENSE
+├── README.md
+└── README_zh.md
 ```
 
-## 開發者指南
+## Developer Guide
 
-### 新增功能
+### Adding New Features
 
-1. 在 `bot/handlers/` 目錄下添加新的處理器
-2. 在 `web/static/js/` 目錄下添加新的 JavaScript 模組
-3. 更新 `web/templates/index.html` 添加新的 UI 元素
-4. 在 `web/static/css/style.css` 中添加新的樣式
+1. Add new handlers in `bot/handlers/` directory
+2. Add new JavaScript modules in `web/static/js/` directory
+3. Update `web/templates/index.html` for new UI elements
+4. Add new styles in `web/static/css/style.css`
 
-### 除錯
+### Debugging
 
-- 檢查 `bot/core/logger.py` 的日誌輸出
-- 使用瀏覽器的開發者工具查看前端錯誤
-- 檢查 Flask 的除錯輸出
+- Check logs in `bot/core/logger.py`
+- Use browser developer tools for frontend errors
+- Check Flask debug output
 
-## 貢獻指南
+## Changelog
 
-1. Fork 專案
-2. 創建新的分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 開啟 Pull Request
+### v1.0.0 (2024-03-21)
+- Initial release
+- Basic features implemented
+  - Server selection
+  - Channel selection
+  - Message display
+  - Image attachment support
 
-## 授權
+### v1.0.1 (2024-03-21)
+- Fixed image zoom functionality
+  - Optimized image click event handling
+  - Improved overlay styles
+  - Enhanced user experience
+- Updated README files
+  - Added changelog
+  - Improved feature descriptions
+  - Updated project structure
 
-本專案採用 GPL-3.0 授權條款 - 詳見 [LICENSE](LICENSE) 文件
+## Contributing
 
-## 聯絡方式
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-如有任何問題或建議，請開啟 Issue 或 Pull Request。 
+## License
+
+This project is licensed under the GPL-3.0 License - see the [LICENSE](LICENSE) file for details
+
+## Contact
+
+For any questions or suggestions, please open an Issue or Pull Request. 
