@@ -10,12 +10,17 @@ A Discord bot with a web control panel for real-time message monitoring and mana
   - Auto-updates every 5 seconds
   - Supports text and image messages
   - Click to zoom images
+  - Messages are preserved when switching channels
 - Server Management
   - Shows all servers the bot is in
   - Automatically selects the first server
 - Channel Management
   - Shows all channels in the selected server
   - Automatically selects the first channel
+  - Detailed debug logs for channel switching
+- Message Sending
+  - Send messages to selected channels
+  - Detailed logging of sent messages
 - User Interface
   - Clean web control panel
   - Responsive design
@@ -138,6 +143,16 @@ discord-bot-with-control-panel/
   - Added changelog
   - Improved feature descriptions
   - Updated project structure
+
+### v1.0.2 (2024-04-03)
+- Enhanced channel management
+  - Added detailed debug logging for channel switching
+  - Improved message display when switching channels
+  - Optimized server and channel information storage
+- Improved message handling
+  - Enhanced message sending with channel name logging
+  - Added more comprehensive error handling
+  - Messages are now preserved when switching channels
 
 ## Contributing
 

@@ -43,7 +43,7 @@ def setup_events(bot: commands.Bot, discord_bot) -> None:
             return
 
         try:
-            logger.info(f"收到來自 {message.author} 的訊息: {message.content}")
+            logger.info(f"收到來自 {message.author} 的訊息")
 
             # 處理附件
             attachments: List[Dict] = []

@@ -7,10 +7,13 @@ body {
 }
 
 .container {
-    background-color: white;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 .guild-selector {
@@ -21,28 +24,32 @@ body {
 }
 
 .guild-select {
-    width: 100%;
+    flex: 1;
     padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 4px;
+    background-color: white;
 }
 
 .message-list {
-    margin-top: 20px;
-    height: 500px;
+    flex: 1;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     background-color: #f8f9fa;
     border-radius: 5px;
     padding: 10px;
+    margin-bottom: 20px;
+    min-height: 0;
 }
 
 #messages {
     flex: 1;
     overflow-y: auto;
     padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 #messages::-webkit-scrollbar {
@@ -51,6 +58,7 @@ body {
 
 #messages::-webkit-scrollbar-track {
     background: #f1f1f1;
+    border-radius: 4px;
 }
 
 #messages::-webkit-scrollbar-thumb {
@@ -112,13 +120,16 @@ body {
 }
 
 .refresh-btn {
-    margin-top: 10px;
     padding: 8px 16px;
-    background-color: #4CAF50;
+    background-color: #7289da;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.refresh-btn:hover {
+    background-color: #677bc4;
 }
 
 .no-messages {
@@ -232,7 +243,7 @@ body {
 .controls {
     display: flex;
     gap: 10px;
-    margin: 10px 0;
+    margin-bottom: 20px;
 }
 
 .controls select {
@@ -253,5 +264,54 @@ body {
 }
 
 .controls button:hover {
+    background-color: #677bc4;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message-input-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.message-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.message-input:focus {
+    outline: none;
+}
+
+.send-button {
+    padding: 8px 16px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.send-button:hover {
     background-color: #677bc4;
 } 

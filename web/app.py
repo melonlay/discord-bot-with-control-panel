@@ -6,17 +6,32 @@ from werkzeug.serving import make_server
 import json
 import time
 import uuid
+import os
 
 
 class FlaskApp:
     def __init__(self, discord_bot):
-        self.app = Flask(__name__)
+        # 獲取當前文件所在目錄的絕對路徑
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # 設置模板和靜態文件目錄的絕對路徑
+        template_dir = os.path.join(current_dir, 'templates')
+        static_dir = os.path.join(current_dir, 'static')
+
+        self.app = Flask(__name__,
+                         template_folder=template_dir,
+                         static_folder=static_dir)
         self.discord_bot = discord_bot
         self.last_messages = []
         self.connections = set()
         self.connections_lock = Lock()
         self.setup_routes()
+        self.server = make_server(FLASK_HOST, FLASK_PORT, self.app)
+        self.server_thread = Thread(target=self.server.serve_forever)
+        self.server_thread.daemon = True
+        self.server_thread.start()
         logger.info("Flask 應用初始化完成")
+        logger.debug(f"模板目錄: {template_dir}")
+        logger.debug(f"靜態文件目錄: {static_dir}")
 
     def setup_routes(self):
         @self.app.route('/')
@@ -35,13 +50,7 @@ class FlaskApp:
                 # 獲取訊息
                 messages = self.discord_bot.get_message_history(
                     after_timestamp)
-                logger.debug(f"從 DiscordBot 獲取訊息歷史，共 {len(messages)} 條訊息")
-
-                # 處理訊息格式
-                for msg in messages:
-                    if 'guild_id' in msg and msg['guild_id'] is not None:
-                        msg['guild_id'] = str(msg['guild_id'])
-                    logger.debug(f"訊息內容: {msg}")
+                logger.debug(f"獲取到 {len(messages)} 條新訊息")
 
                 return jsonify(messages)
             except Exception as e:
@@ -56,6 +65,34 @@ class FlaskApp:
                 guild['id'] = str(guild['id'])
                 logger.debug(f"伺服器: {guild}")
             return jsonify(guilds)
+
+        @self.app.route('/channels/<guild_id>')
+        def get_channels(guild_id):
+            try:
+                channels = self.discord_bot.get_channels(guild_id)
+                logger.debug(f"從 DiscordBot 獲取頻道列表，共 {len(channels)} 個頻道")
+                return jsonify(channels)
+            except Exception as e:
+                logger.error(f"獲取頻道列表時發生錯誤: {e}")
+                return jsonify([])
+
+        @self.app.route('/send-message', methods=['POST'])
+        def send_message():
+            try:
+                data = request.get_json()
+                guild_id = data.get('guild_id')
+                channel_id = data.get('channel_id')
+                content = data.get('content')
+
+                if not all([guild_id, channel_id, content]):
+                    return jsonify({'error': '缺少必要參數'}), 400
+
+                # 使用 Discord bot 發送訊息
+                self.discord_bot.send_message(guild_id, channel_id, content)
+                return jsonify({'status': 'success'})
+            except Exception as e:
+                logger.error(f"發送訊息時發生錯誤: {e}")
+                return jsonify({'error': str(e)}), 500
 
         @self.app.route('/stream')
         def stream():
@@ -117,8 +154,10 @@ class FlaskApp:
         self.last_messages = messages
         logger.debug(f"已更新訊息，當前連接數: {len(self.connections)}")
 
-    def run(self):
-        self.app.run(host=FLASK_HOST, port=FLASK_PORT, threaded=True)
+    def shutdown(self):
+        logger.info("正在關閉 Flask 伺服器...")
+        self.server.shutdown()
+        self.server_thread.join()
 
 
 class FlaskThread(Thread):

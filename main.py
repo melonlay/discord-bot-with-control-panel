@@ -3,7 +3,7 @@ import sys
 import os
 from dotenv import load_dotenv
 from bot import DiscordBot
-from web.app import FlaskThread
+from web.app import FlaskApp
 
 # 載入環境變數
 load_dotenv()
@@ -20,25 +20,18 @@ async def main():
     discord_bot = DiscordBot(token)
     bot = discord_bot.get_bot()
 
-    # 啟動 Flask 伺服器
-    flask_thread = FlaskThread(discord_bot.app)
-    flask_thread.daemon = True
-    flask_thread.start()
+    # 初始化 Flask 應用
+    flask_app = FlaskApp(discord_bot)
 
     try:
         # 啟動 Discord 機器人
         await discord_bot.start_bot()
     except KeyboardInterrupt:
         print("\n正在關閉程式...")
-        # 關閉 Flask 伺服器
-        flask_thread.shutdown()
         # 關閉 Discord 機器人
         await discord_bot.close_bot()
         sys.exit(0)
 
-if __name__ == '__main__':
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\n程式已關閉")
-        sys.exit(0)
+
+if __name__ == "__main__":
+    asyncio.run(main())

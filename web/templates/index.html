@@ -1,48 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Bot Control Panel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title data-i18n="title">Discord Bot Control Panel</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Discord Bot Control Panel</h1>
-            <div id="connectionStatus" class="disconnected">未連接</div>
-            <div class="controls">
-                <select id="guild-selector">
-                    <option value="">選擇伺服器...</option>
-                </select>
-                <select id="channel-selector">
-                    <option value="">選擇頻道...</option>
-                </select>
-                <button id="refresh-btn">重新整理</button>
-            </div>
-        </header>
+        <div class="language-selector">
+            <button id="lang-en" data-i18n="english">English</button>
+            <button id="lang-zh" data-i18n="chinese">繁體中文</button>
+        </div>
+        
+        <div class="controls">
+            <select id="server-selector" class="guild-select">
+                <option value="" data-i18n="select-server">選擇伺服器</option>
+            </select>
+            <select id="channel-selector" class="guild-select">
+                <option value="" data-i18n="select-channel">選擇頻道</option>
+            </select>
+            <button id="refresh-btn" class="refresh-btn" data-i18n="refresh">重新整理</button>
+        </div>
         
         <div class="message-list">
             <div id="messages"></div>
         </div>
+        
+        <div class="message-input-container">
+            <input type="text" id="message-input" class="message-input" placeholder="輸入訊息..." data-i18n="input-message">
+            <button id="send-button" class="send-button" data-i18n="send">發送</button>
+        </div>
+        
+        <div id="overlay" class="overlay"></div>
     </div>
 
-    <!-- 圖片放大遮罩層 -->
-    <div class="overlay"></div>
-
-    <!-- 載入JavaScript模組 -->
-    <script src="{{ url_for('static', filename='js/messageFormatter.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/messageManager.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/uiManager.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/eventHandler.js') }}"></script>
-    <script>
-        // 等待DOM載入完成後初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!window.eventHandler) {
-                window.eventHandler = new EventHandler();
-                window.eventHandler.init();
-            }
-        });
-    </script>
+    <script src="/static/js/language.js"></script>
+    <script src="/static/js/messageManager.js"></script>
+    <script src="/static/js/eventHandler.js"></script>
 </body>
 </html> 
