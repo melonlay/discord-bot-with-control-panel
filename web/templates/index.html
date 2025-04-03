@@ -4,42 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Bot 控制面板</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Discord Bot 控制面板</h1>
+            <h1>Discord Bot Control Panel</h1>
             <div id="connectionStatus" class="disconnected">未連接</div>
+            <div class="controls">
+                <select id="guild-selector">
+                    <option value="">選擇伺服器</option>
+                </select>
+                <select id="channel-selector">
+                    <option value="">選擇頻道</option>
+                </select>
+                <button id="refresh-button">重新整理</button>
+            </div>
         </header>
         
-        <div class="controls">
-            <select id="guildSelect">
-                <option value="">載入中...</option>
-            </select>
-            <button id="refreshButton">重新整理</button>
-        </div>
-        
-        <div class="message-list">
-            <div id="messages">
-                <div class="loading">載入中...</div>
-            </div>
-        </div>
+        <div id="messages" class="message-list"></div>
     </div>
 
     <!-- 載入JavaScript模組 -->
-    <script src="/static/js/messageFormatter.js"></script>
-    <script src="/static/js/messageManager.js"></script>
-    <script src="/static/js/uiManager.js"></script>
-    <script src="/static/js/eventHandler.js"></script>
+    <script src="{{ url_for('static', filename='js/messageFormatter.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/messageManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/uiManager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/eventHandler.js') }}"></script>
     <script>
         // 等待DOM載入完成後初始化
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化事件處理
-            EventHandler.init();
-            
-            // 初始重新整理
-            EventHandler.refreshData();
+            if (!window.eventHandler) {
+                window.eventHandler = new EventHandler();
+                window.eventHandler.init();
+            }
         });
     </script>
     <div class="overlay"></div>

@@ -131,32 +131,27 @@ body {
     border-radius: 5px;
 }
 
-.attachment.image img {
-    max-width: 100%;
-    max-height: 300px;
-    border-radius: 5px;
+.message-attachment {
+    max-width: 300px;
+    max-height: 200px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.3s ease;
+    border-radius: 5px;
+    object-fit: contain;
 }
 
-.attachment.image img:hover {
-    transform: scale(1.02);
-}
-
-/* 圖片放大模式 */
-.attachment.image img.zoomed {
+.message-attachment.zoomed {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    max-width: 90vw;
-    max-height: 90vh;
+    transform: translate(-50%, -50%) scale(1.2);
     z-index: 1000;
+    max-width: 80vw;
+    max-height: 80vh;
     cursor: zoom-out;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* 圖片放大時的背景遮罩 */
 .overlay {
     display: none;
     position: fixed;
@@ -166,6 +161,7 @@ body {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 999;
+    cursor: zoom-out;
 }
 
 .overlay.active {
@@ -182,4 +178,31 @@ body {
 
 .attachment.file a:hover {
     text-decoration: underline;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.controls select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    min-width: 200px;
+}
+
+.controls button {
+    padding: 8px 16px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background-color: #677bc4;
 } 

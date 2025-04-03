@@ -7,35 +7,64 @@ const MessageManager = {
     hasNewMessages: false,
 
     // 顯示訊息
-    displayMessages() {
+    displayMessages(messages) {
+        const messageList = document.getElementById('messages');
+        if (!messageList) {
+            console.error('找不到訊息列表元素');
+            return;
+        }
+
         try {
-            const messageContainer = document.getElementById('messages');
-            if (!messageContainer) {
-                console.error('找不到訊息容器元素');
-                return;
-            }
+            // 清空現有訊息
+            messageList.innerHTML = '';
             
-            const currentGuildId = document.getElementById('guildSelect').value;
-            
-            // 過濾並顯示訊息
-            const filteredMessages = this.allMessages.filter(
-                msg => msg.guild_id === currentGuildId
-            );
-            
-            // 只在有新訊息時更新顯示
-            if (this.hasNewMessages) {
-                console.debug(`顯示 ${filteredMessages.length} 條訊息`);
-                messageContainer.innerHTML = filteredMessages
-                    .map(msg => MessageFormatter.formatMessage(msg))
-                    .join('');
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message';
                 
-                // 滾動到底部
-                messageContainer.scrollTop = messageContainer.scrollHeight;
-                this.hasNewMessages = false;
-            } else if (filteredMessages.length === 0) {
-                // 如果沒有訊息，顯示提示
-                messageContainer.innerHTML = '<div class="no-messages">此伺服器目前沒有訊息記錄</div>';
-            }
+                // 添加訊息內容
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                content.textContent = message.content || '';
+                messageElement.appendChild(content);
+
+                // 如果有附件，添加附件
+                if (message.attachments && message.attachments.length > 0) {
+                    const attachmentsContainer = document.createElement('div');
+                    attachmentsContainer.className = 'message-attachments';
+                    
+                    message.attachments.forEach(attachment => {
+                        if (attachment.url) {
+                            const img = document.createElement('img');
+                            img.src = attachment.url;
+                            img.alt = '附件圖片';
+                            img.className = 'message-attachment';
+                            img.onclick = () => {
+                                window.toggleZoom(img);
+                                // 點擊遮罩層時關閉圖片
+                                const overlay = document.querySelector('.overlay');
+                                overlay.onclick = () => {
+                                    window.toggleZoom(img);
+                                };
+                            };
+                            attachmentsContainer.appendChild(img);
+                        }
+                    });
+                    
+                    messageElement.appendChild(attachmentsContainer);
+                }
+
+                // 添加時間戳
+                const timestamp = document.createElement('div');
+                timestamp.className = 'message-timestamp';
+                timestamp.textContent = message.timestamp || '';
+                messageElement.appendChild(timestamp);
+
+                messageList.appendChild(messageElement);
+            });
+
+            // 滾動到底部
+            messageList.scrollTop = messageList.scrollHeight;
         } catch (error) {
             console.error('顯示訊息時發生錯誤:', error);
         }
@@ -77,8 +106,8 @@ const MessageManager = {
                     console.debug(`添加 ${uniqueNewMessages.length} 條新訊息`);
                 }
                 
-                // 顯示訊息
-                this.displayMessages();
+                // 顯示所有訊息
+                this.displayMessages(this.allMessages);
             }
         } catch (error) {
             console.error('更新訊息時發生錯誤:', error);

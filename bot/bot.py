@@ -162,6 +162,55 @@ class DiscordBot:
             logger.error(f"獲取訊息時發生錯誤: {e}")
             return []
 
+    def get_guilds(self) -> List[Dict]:
+        """
+        獲取機器人加入的所有伺服器列表
+
+        Returns:
+            List[Dict]: 伺服器列表，每個伺服器包含 id 和 name
+        """
+        try:
+            guilds = []
+            for guild in self.bot.guilds:
+                guilds.append({
+                    'id': str(guild.id),
+                    'name': guild.name
+                })
+            logger.debug(f"獲取到 {len(guilds)} 個伺服器")
+            return guilds
+        except Exception as e:
+            logger.error(f"獲取伺服器列表時發生錯誤: {e}")
+            return []
+
+    def get_channels(self, guild_id: str) -> List[Dict]:
+        """
+        獲取指定伺服器的頻道列表
+
+        Args:
+            guild_id (str): 伺服器 ID
+
+        Returns:
+            List[Dict]: 頻道列表
+        """
+        try:
+            guild = self.bot.get_guild(int(guild_id))
+            if not guild:
+                logger.error(f"找不到伺服器: {guild_id}")
+                return []
+
+            channels = []
+            for channel in guild.text_channels:
+                channels.append({
+                    'id': str(channel.id),
+                    'name': channel.name,
+                    'type': 'text'
+                })
+            logger.debug(f"獲取頻道列表，共 {len(channels)} 個頻道")
+            return channels
+        except Exception as e:
+            logger.error(f"獲取頻道列表時發生錯誤: {e}")
+            return []
+
     def setup_flask_app(self) -> None:
         """
         設置 Flask 應用路由
@@ -215,26 +264,23 @@ class DiscordBot:
                 logger.error(f"獲取伺服器列表時發生錯誤: {e}")
                 return json.dumps([])
 
-    def get_guilds(self) -> List[Dict]:
-        """
-        獲取機器人加入的所有伺服器列表
+        @self.app.route('/channels/<guild_id>')
+        def get_channels(guild_id: str) -> str:
+            """
+            獲取頻道列表的路由
 
-        Returns:
-            List[Dict]: 伺服器列表
-        """
-        try:
-            guilds = []
-            for guild in self.bot.guilds:
-                guilds.append({
-                    'id': str(guild.id),
-                    'name': guild.name,
-                    'member_count': guild.member_count
-                })
-            logger.debug(f"獲取伺服器列表，共 {len(guilds)} 個伺服器")
-            return guilds
-        except Exception as e:
-            logger.error(f"獲取伺服器列表時發生錯誤: {e}")
-            return []
+            Args:
+                guild_id (str): 伺服器 ID
+
+            Returns:
+                str: JSON 格式的頻道列表
+            """
+            try:
+                channels = self.get_channels(guild_id)
+                return json.dumps(channels)
+            except Exception as e:
+                logger.error(f"獲取頻道列表時發生錯誤: {e}")
+                return json.dumps([])
 
     async def start_bot(self) -> None:
         """
